@@ -29,6 +29,7 @@ pydantic-model:
 	datamodel-codegen --input $(DIRS_WITH_ACTORS)/pinecone/.actor/input_schema.json --output $(DIRS_WITH_CODE)/src/models/pinecone_input_model.py  --input-file-type jsonschema  --field-constraints  --enum-field-as-literal all
 	datamodel-codegen --input $(DIRS_WITH_ACTORS)/qdrant/.actor/input_schema.json --output $(DIRS_WITH_CODE)/src/models/qdrant_input_model.py  --input-file-type jsonschema  --field-constraints  --enum-field-as-literal all
 	datamodel-codegen --input $(DIRS_WITH_ACTORS)/weaviate/.actor/input_schema.json --output $(DIRS_WITH_CODE)/src/models/weaviate_input_model.py  --input-file-type jsonschema  --field-constraints  --enum-field-as-literal all
+	 datamodel-codegen --input $(DIRS_WITH_ACTORS)/opengauss/.actor/input_schema.json --output $(DIRS_WITH_CODE)/src/models/opengauss_input_model.py  --input-file-type jsonschema  --field-constraints  --enum-field-as-literal all
 
 
 # Integration tests are marked with @pytest.mark.integration_test

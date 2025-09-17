@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from .models import (
         ChromaIntegration,
         MilvusIntegration,
+        OpengaussIntegration,
         OpensearchIntegration,
         PgvectorIntegration,
         PineconeIntegration,
@@ -15,6 +16,7 @@ if TYPE_CHECKING:
     from .vector_stores import (
         ChromaDatabase,
         MilvusDatabase,
+        OpenGaussDatabase,
         OpenSearchDatabase,
         PGVectorDatabase,
         PineconeDatabase,
@@ -25,6 +27,7 @@ if TYPE_CHECKING:
     ActorInputsDb: TypeAlias = (
         ChromaIntegration
         | MilvusIntegration
+        | OpengaussIntegration
         | OpensearchIntegration
         | PgvectorIntegration
         | PineconeIntegration
@@ -32,5 +35,12 @@ if TYPE_CHECKING:
         | WeaviateIntegration
     )
     VectorDb: TypeAlias = (
-        ChromaDatabase | MilvusDatabase | OpenSearchDatabase | PGVectorDatabase | PineconeDatabase | QdrantDatabase | WeaviateDatabase
+        ChromaDatabase
+        | MilvusDatabase
+        | OpenGaussDatabase
+        | OpenSearchDatabase
+        | PGVectorDatabase
+        | PineconeDatabase
+        | QdrantDatabase
+        | WeaviateDatabase
     )

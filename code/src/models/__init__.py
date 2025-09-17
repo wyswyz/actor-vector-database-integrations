@@ -6,3 +6,4 @@ from .pgvector_input_model import PgvectorIntegration
 from .pinecone_input_model import PineconeIntegration
 from .qdrant_input_model import QdrantIntegration
 from .weaviate_input_model import WeaviateIntegration
+from .opengauss_input_model import OpengaussIntegration

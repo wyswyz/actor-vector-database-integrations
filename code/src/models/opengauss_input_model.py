@@ -10,29 +10,26 @@ from pydantic import BaseModel, Field
 from typing_extensions import Literal
 
 
-class QdrantIntegration(BaseModel):
-    qdrantUrl: str = Field(
+class OpengaussIntegration(BaseModel):
+    opengaussHost: str = Field(
+        ..., description='The Host of openGauss', title='openGauss Host'
+    )
+    opengaussPort: str = Field(
+        ..., description='The Port of openGauss', title='openGauss Port'
+    )
+    opengaussUser: str = Field(
+        ..., description='The User of openGauss', title='openGauss User'
+    )
+    opengaussPassword: str = Field(
+        ..., description='The Password of openGauss', title='openGauss Password'
+    )
+    opengaussDBname: str = Field(
+        ..., description='The DBname of openGauss', title='openGauss DBname'
+    )
+    opengaussTableName: str = Field(
         ...,
-        description='REST URL of the Qdrant instance to connect to',
-        title='Qdrant URL',
-    )
-    qdrantApiKey: Optional[str] = Field(
-        None, description='Qdrant API KEY', title='Qdrant API KEY'
-    )
-    qdrantCollectionName: str = Field(
-        ...,
-        description='Name of the Qdrant collection where the data will be stored',
-        title='Qdrant Collection Name',
-    )
-    qdrantAutoCreateCollection: Optional[bool] = Field(
-        True,
-        description='When set to true, the integration will automatically create the collection in Qdrant if it does not exist with the appropriate vector dimensions.',
-        title='Whether to automatically create the collection.',
-    )
-    qdrantVectorName: Optional[str] = Field(
-        None,
-        description='Name of the vector to use in Qdrant, see https://qdrant.tech/documentation/concepts/vectors/#named-vectors',
-        title='Vector name for a separate named vector spaces',
+        description='The name of the table to use',
+        title='openGauss SQL table name',
     )
     embeddingsProvider: Literal['OpenAI', 'Cohere'] = Field(
         ...,

@@ -11,6 +11,7 @@ from langchain_openai.embeddings import OpenAIEmbeddings
 from models import (  # type: ignore
     ChromaIntegration,
     MilvusIntegration,
+    OpengaussIntegration,
     OpensearchIntegration,
     PgvectorIntegration,
     PineconeIntegration,
@@ -20,6 +21,7 @@ from models import (  # type: ignore
 from utils import add_item_checksum  # type: ignore[import-not-found]
 from vector_stores.chroma import ChromaDatabase  # type: ignore[import-not-found]
 from vector_stores.milvus import MilvusDatabase  # type: ignore[import-not-found]
+from vector_stores.opengauss import OpenGaussDatabase  # type: ignore[import-not-found]
 from vector_stores.opensearch import OpenSearchDatabase  # type: ignore[import-not-found]
 from vector_stores.pgvector import PGVectorDatabase  # type: ignore[import-not-found]
 from vector_stores.pinecone import PineconeDatabase  # type: ignore[import-not-found]
@@ -32,7 +34,17 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 INDEX_NAME = "apifyunittest"
 
 # Database fixtures to test. Fill here the name of the fixtures you want to test
-DATABASE_FIXTURES = ["db_chroma", "db_milvus", "db_opensearch", "db_pgvector", "db_pinecone", "db_pinecone_id_prefix", "db_qdrant", "db_weaviate"]
+DATABASE_FIXTURES = [
+    "db_chroma",
+    "db_milvus",
+    "db_opengauss",
+    "db_opensearch",
+    "db_pgvector",
+    "db_pinecone",
+    "db_pinecone_id_prefix",
+    "db_qdrant",
+    "db_weaviate"
+]
 
 UUID = "00000000-0000-0000-0000-0000000000"
 ID1 = f"{UUID}10"
@@ -295,6 +307,34 @@ def db_weaviate(crawl_1: list[Document]) -> Generator[WeaviateDatabase, Any, Non
     db.delete_all()
     # Insert initially crawled objects
     db.add_documents(documents=crawl_1, ids=[d.metadata["chunk_id"] for d in crawl_1])
+
+    yield db
+
+    db.delete_all()
+
+@pytest.fixture()
+def db_opengauss(crawl_1: list[Document]) -> OpenGaussDatabase:
+    db = OpenGaussDatabase(
+        actor_input=OpengaussIntegration(
+            opengaussHost=os.getenv("OPENGAUSS_HOST"),
+            opengaussPort=os.getenv("OPENGAUSS_PORT"),
+            opengaussUser=os.getenv("OPENGAUSS_USER"),
+            opengaussPassword=os.getenv("OPENGAUSS_PASSWORD"),
+            opengaussDBname=os.getenv("OPENGAUSS_DBNAME"),
+            opengaussTableName=INDEX_NAME,
+            embeddingsProvider="OpenAI",
+            embeddingsApiKey=os.getenv("OPENAI_API_KEY"),
+            datasetFields=["text"],
+        ),
+        embeddings=embeddings,
+    )
+
+    db.unit_test_wait_for_index = 0
+
+    db.delete_all()
+    # Insert initially crawled objects
+    db.add_documents(documents=crawl_1, ids=[d.metadata["chunk_id"] for d in crawl_1])
+    time.sleep(db.unit_test_wait_for_index)
 
     yield db
 

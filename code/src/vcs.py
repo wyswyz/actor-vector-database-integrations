@@ -12,6 +12,7 @@ from langchain_core.vectorstores import VectorStore
 from .models import (
     ChromaIntegration,
     MilvusIntegration,
+    OpengaussIntegration,
     OpensearchIntegration,
     PgvectorIntegration,
     PineconeIntegration,
@@ -64,6 +65,11 @@ async def get_vector_database(actor_input: ActorInputsDb | None, embeddings: Emb
         from .vector_stores.weaviate import WeaviateDatabase
 
         return WeaviateDatabase(actor_input, embeddings)
+
+    if isinstance(actor_input, OpengaussIntegration):
+        from .vector_stores.opengauss import OpenGaussDatabase
+
+        return OpenGaussDatabase(actor_input, embeddings)
 
     raise ValueError("Unknown integration type")
 

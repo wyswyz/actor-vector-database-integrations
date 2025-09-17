@@ -7,6 +7,7 @@ from .main import run_actor
 from .models import (
     ChromaIntegration,
     MilvusIntegration,
+    OpengaussIntegration,
     OpensearchIntegration,
     PgvectorIntegration,
     PineconeIntegration,
@@ -57,6 +58,8 @@ async def main() -> None:
             await run_actor(QdrantIntegration(**actor_input), actor_input)
         elif actor_type == SupportedVectorStores.weaviate.value:
             await run_actor(WeaviateIntegration(**actor_input), actor_input)
+        elif actor_type == SupportedVectorStores.opengauss.value:
+            await run_actor(OpengaussIntegration(**actor_input), actor_input)
         else:
             await Actor.exit(
                 exit_code=10,

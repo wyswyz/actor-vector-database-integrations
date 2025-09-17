@@ -13,6 +13,7 @@ class SupportedVectorStores(str, enum.Enum):
     pinecone = "pinecone"
     qdrant = "qdrant"
     weaviate = "weaviate"
+    opengauss = "opengauss"
 
 
 class SupportedEmbeddings(str, enum.Enum):
